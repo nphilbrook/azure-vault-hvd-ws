@@ -1,0 +1,27 @@
+provider "azurerm" {
+  use_cli                         = false
+  resource_provider_registrations = "none"
+
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
+}
+
+provider "acme" {
+  server_url = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
+provider "local" {
+}
+
+provider "tls" {
+}
+
+provider "random" {
+}
+
+provider "tfe" {
+  organization = "philbrook"
+}
