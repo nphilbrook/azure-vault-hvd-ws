@@ -23,5 +23,5 @@ provider "random" {
 }
 
 provider "tfe" {
-  organization = "philbrook"
+  organization = var.tfe_organization
 }
