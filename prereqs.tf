@@ -11,7 +11,7 @@ module "tls_certs" {
 
 module "vault_prereqs" {
   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  version = "0.0.4"
+  version = "0.0.5"
 
   # --- Common --- #
   friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.environment
@@ -60,6 +60,7 @@ module "vault_prereqs" {
 }
 
 # Auto-unseal key
+# Requires a KVAP with GetRotationPolicy (and other stuff)
 resource "azurerm_key_vault_key" "vault_unseal_key" {
   name         = "vault-unseal-key-001"
   key_vault_id = module.vault_prereqs.key_vault_id
