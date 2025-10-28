@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.3-alpha"
+  version = "0.1.5-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
