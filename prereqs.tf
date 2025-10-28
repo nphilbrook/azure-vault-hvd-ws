@@ -11,7 +11,7 @@ module "tls_certs" {
 
 module "vault_prereqs" {
   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  version = "0.0.5"
+  version = "0.0.6"
 
   # --- Common --- #
   friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.environment
@@ -21,25 +21,31 @@ module "vault_prereqs" {
   common_tags           = local.default_tags
 
   # --- DNS --- #
-  create_public_dns_zone  = false
-  public_dns_zone_name    = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
+  # Created in azure-core-infra-ws since I needed it for TLS verification
+  create_public_dns_zone = false
+
   create_private_dns_zone = true
-  # See if this works? Same name as public zone
-  private_dns_zone_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
+  # Kind of skeezy using the same name as the public zone, but we actually want them to be the same
+  private_dns_zone_name             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
+  create_private_dns_zone_vnet_link = false
 
   # --- Networking --- #
-  create_vnet                    = true
-  create_nat_gateway             = true
-  create_nsg_nat_rule            = true
-  create_bastion                 = true
-  vnet_cidr                      = ["10.128.4.0/22"]
-  bastion_subnet_cidr            = "10.128.5.0/24"
-  lb_subnet_cidr                 = "10.128.6.0/24"
-  vault_subnet_cidr              = "10.128.7.0/24"
+  create_vnet         = true
+  create_nat_gateway  = true
+  create_nsg_nat_rule = true
+  create_bastion      = true
+  vnet_cidr           = ["10.128.4.0/22"]
+  bastion_subnet_cidr = "10.128.5.0/24"
+  # Rolling with one subnet for everything
+  # lb_subnet_cidr                 = "10.128.6.0/24"
+  # Testing in a /25 will work for this
+  vault_subnet_cidr              = "10.128.6.0/25"
   cidr_allow_ingress_bastion_ssh = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
-  cidr_allow_ingress_lb_443      = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
-  cidr_ingress_lb_allow_8200     = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
-  cidr_ingress_vault_allow_8200  = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
+
+  # Will get to all of these through the bastion for now
+  # cidr_allow_ingress_lb_443      = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
+  # cidr_ingress_lb_allow_8200     = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
+  # cidr_ingress_vault_allow_8200  = data.tfe_outputs.azure_hcp_control_outputs.nonsensitive_values.ingress_ips
 
   # Taking a Zero-Trust posture here, since I'm using HCPt's global agent pool
   # To lock this down, would need to run HCPt agents somewhere and allow-list those IPs
