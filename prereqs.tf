@@ -11,7 +11,7 @@ module "tls_certs" {
 
 module "vault_prereqs" {
   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  version = "0.0.6"
+  version = "0.0.7"
 
   # --- Common --- #
   friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.environment
