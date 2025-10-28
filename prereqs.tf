@@ -54,7 +54,7 @@ module "vault_prereqs" {
   # --- Key Vault "Bootstrap" Secrets --- #
   create_key_vault          = true
   kv_vault_license          = var.vault_license
-  kv_vault_cert_base64      = module.tls_certs.tls_cert_base64
+  kv_vault_cert_base64      = module.tls_certs.tls_fullchain_base64
   kv_vault_privkey_base64   = module.tls_certs.tls_privkey_base64
   kv_vault_ca_bundle_base64 = module.tls_certs.tls_ca_bundle_base64
 }

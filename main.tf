@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.2-alpha"
+  version = "0.1.3-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -13,8 +13,13 @@ module "vault_hvd" {
   #------------------------------------------------------------------------------
   # Networking
   #------------------------------------------------------------------------------
-  vnet_id         = module.vault_prereqs.vnet_id
-  vault_subnet_id = module.vault_prereqs.vault_subnet_id
+  vnet_id                         = module.vault_prereqs.vnet_id
+  vault_subnet_id                 = module.vault_prereqs.vault_subnet_id
+  lb_subnet_id                    = module.vault_prereqs.vault_subnet_id
+  lb_is_internal                  = true
+  create_vault_private_dns_record = true
+  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
+  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.resource_group_name
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
