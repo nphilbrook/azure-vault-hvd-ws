@@ -58,3 +58,20 @@ module "vault_prereqs" {
   kv_vault_privkey_base64   = module.tls_certs.tls_privkey_base64
   kv_vault_ca_bundle_base64 = module.tls_certs.tls_ca_bundle_base64
 }
+
+# Auto-unseal key
+resource "azurerm_key_vault_key" "vault_unseal_key" {
+  name         = "vault-unseal-key-001"
+  key_vault_id = module.vault_prereqs.key_vault_id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "encrypt",
+    "decrypt",
+    "sign",
+    "verify",
+    "wrapKey",
+    "unwrapKey",
+  ]
+}

@@ -26,8 +26,8 @@ module "vault_hvd" {
   vault_tls_privkey_keyvault_secret_id   = module.vault_prereqs.vault_privkey_kv_secret_id
   vault_tls_ca_bundle_keyvault_secret_id = module.vault_prereqs.vault_ca_bundle_kv_secret_id
 
-  vault_seal_azurekeyvault_vault_name      = "unseal-kv"
-  vault_seal_azurekeyvault_unseal_key_name = "unseal-key"
+  vault_seal_azurekeyvault_vault_name      = module.vault_prereqs.key_vault_name
+  vault_seal_azurekeyvault_unseal_key_name = azurerm_key_vault_key.vault_unseal_key.name
 
   #------------------------------------------------------------------------------
   # Compute
