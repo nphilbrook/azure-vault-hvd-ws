@@ -21,3 +21,8 @@ variable "vault_license" {
   type      = string
   sensitive = true
 }
+
+variable "temp_cert_key" {
+  type      = string
+  sensitive = true
+}
