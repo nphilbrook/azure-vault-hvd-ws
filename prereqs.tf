@@ -2,11 +2,29 @@ module "tls_certs" {
   source  = "app.terraform.io/philbrook/tls-azurerm/acme"
   version = "0.0.2"
 
-  dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
-  dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.resource_group_name
-  tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name}"
+  dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name
+  dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
+  tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}"
   tls_cert_email_address       = var.cert_email
   create_cert_files            = false
+}
+
+module "tls_certs_new_global" {
+  source  = "app.terraform.io/philbrook/tls-azurerm/acme"
+  version = "0.0.3-alpha2"
+
+  dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+  dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+  tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
+  tls_cert_sans = [
+    "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+    "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}",
+    "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.zone_name}",
+    "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}",
+    "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.zone_name}",
+  ]
+  tls_cert_email_address = var.cert_email
+  create_cert_files      = false
 }
 
 module "vault_prereqs" {
@@ -14,9 +32,9 @@ module "vault_prereqs" {
   version = "1.0.0"
 
   # --- Common --- #
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.environment
-  location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.location
-  resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.resource_group_name
+  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
+  location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
+  resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
   create_resource_group = false
   common_tags           = local.default_tags
 
@@ -26,7 +44,7 @@ module "vault_prereqs" {
 
   create_private_dns_zone = true
   # Kind of skeezy using the same name as the public zone, but we actually want them to be the same
-  private_dns_zone_name             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
+  private_dns_zone_name             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name
   create_private_dns_zone_vnet_link = false
 
   # --- Networking --- #

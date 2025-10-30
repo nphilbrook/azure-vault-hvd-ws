@@ -4,11 +4,11 @@ module "vault_hvd" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.environment
-  location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.location
+  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
+  location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   create_resource_group = false
-  resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.resource_group_name
-  vault_fqdn            = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name}"
+  resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
+  vault_fqdn            = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}"
 
   #------------------------------------------------------------------------------
   # Networking
@@ -18,13 +18,13 @@ module "vault_hvd" {
   lb_subnet_id                    = module.vault_prereqs.vault_subnet_id
   lb_is_internal                  = true
   create_vault_private_dns_record = true
-  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.zone_name
-  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.resource_group_name
+  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name
+  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
   #------------------------------------------------------------------------------
-  prereqs_keyvault_rg_name               = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.resource_group_name
+  prereqs_keyvault_rg_name               = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
   prereqs_keyvault_name                  = module.vault_prereqs.key_vault_name
   vault_license_keyvault_secret_id       = module.vault_prereqs.vault_license_kv_secret_id
   vault_tls_cert_keyvault_secret_id      = module.vault_prereqs.vault_cert_kv_secret_id
