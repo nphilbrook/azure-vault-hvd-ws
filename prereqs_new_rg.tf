@@ -11,7 +11,7 @@ module "tls_certs_2" {
 
 module "vault_prereqs_2" {
   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  version = "0.0.8"
+  version = "1.0.0"
 
   # --- Common --- #
   friendly_name_prefix  = "secondary"

@@ -42,4 +42,9 @@ module "vault_hvd" {
   #   vmss_vm_count     = var.vault_vms_count
   # default is "Standard_D2s_v5"
   # vm_sku            = "Standard_D2as_v6" # try Standard_D2ds_v6
+
+  # Oracle plugin
+  # This won't work until we override the custom_data shell script to install the client libs - not in RHEL repos
+  #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
+  #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 }
