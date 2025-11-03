@@ -8,7 +8,7 @@ module "vault_hvd" {
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   create_resource_group = false
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
-  vault_fqdn            = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}"
+  vault_fqdn            = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
 
   #------------------------------------------------------------------------------
   # Networking
@@ -18,8 +18,8 @@ module "vault_hvd" {
   lb_subnet_id                    = module.vault_prereqs.vault_subnet_id
   lb_is_internal                  = true
   create_vault_private_dns_record = true
-  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name
-  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
+  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
@@ -62,7 +62,7 @@ module "vault_hvd" {
 #   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.location
 #   create_resource_group = false
 #   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.resource_group_name
-#   vault_fqdn            = "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.zone_name}"
+#   vault_fqdn            = "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
 
 #   #------------------------------------------------------------------------------
 #   # Networking
@@ -72,8 +72,8 @@ module "vault_hvd" {
 #   lb_subnet_id                    = module.vault_prereqs_dr.vault_subnet_id
 #   lb_is_internal                  = true
 #   create_vault_private_dns_record = true
-#   private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.zone_name
-#   private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.resource_group_name
+#   private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+#   private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
 
 #   #------------------------------------------------------------------------------
 #   # Azure Key Vault installation secrets and unseal key
