@@ -50,7 +50,8 @@ module "vault_hvd" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
-  vault_version = "1.21.0+ent"
+  vault_version                  = "1.21.0+ent"
+  custom_startup_script_template = "azure_rhel9.sh.tpl"
 }
 
 module "vault_ubuntu" {
@@ -161,7 +162,8 @@ module "vault_hvd_dr" {
   # This won't work until we override the custom_data shell script to install the client libs - not in RHEL repos
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
-  vault_version = "1.21.0+ent"
+  vault_version                  = "1.21.0+ent"
+  custom_startup_script_template = "azure_rhel9.sh.tpl"
 }
 
 # TODO: global DNS with Azure Traffic Manager
