@@ -1,20 +1,20 @@
-module "tls_certs_new_global" {
-  source  = "app.terraform.io/philbrook/tls-azurerm/acme"
-  version = "0.0.3-alpha2"
+# module "tls_certs_new_global" {
+#   source  = "app.terraform.io/philbrook/tls-azurerm/acme"
+#   version = "0.0.3-alpha2"
 
-  dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
-  dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
-  tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
-  tls_cert_sans = [
-    "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
-    "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}",
-    "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.zone_name}",
-    "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}",
-    "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.zone_name}",
-  ]
-  tls_cert_email_address = var.cert_email
-  create_cert_files      = false
-}
+#   dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+#   dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+#   tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
+#   tls_cert_sans = [
+#     "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+#     "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}",
+#     "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.zone_name}",
+#     "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}",
+#     "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.zone_name}",
+#   ]
+#   tls_cert_email_address = var.cert_email
+#   create_cert_files      = false
+# }
 
 module "tls_certs_newer_global" {
   source  = "app.terraform.io/philbrook/tls-azurerm/acme"
@@ -81,9 +81,9 @@ module "vault_prereqs" {
   # --- Key Vault "Bootstrap" Secrets --- #
   create_key_vault          = true
   kv_vault_license          = var.vault_license
-  kv_vault_cert_base64      = module.tls_certs_new_global.tls_fullchain_base64
-  kv_vault_privkey_base64   = module.tls_certs_new_global.tls_privkey_base64
-  kv_vault_ca_bundle_base64 = module.tls_certs_new_global.tls_ca_bundle_base64
+  kv_vault_cert_base64      = module.tls_certs_newer_global.tls_fullchain_base64
+  kv_vault_privkey_base64   = module.tls_certs_newer_global.tls_privkey_base64
+  kv_vault_ca_bundle_base64 = module.tls_certs_newer_global.tls_ca_bundle_base64
 }
 
 # Auto-unseal key
@@ -156,9 +156,9 @@ module "vault_prereqs_dr" {
   # --- Key Vault "Bootstrap" Secrets --- #
   create_key_vault          = true
   kv_vault_license          = var.vault_license
-  kv_vault_cert_base64      = module.tls_certs_new_global.tls_fullchain_base64
-  kv_vault_privkey_base64   = module.tls_certs_new_global.tls_privkey_base64
-  kv_vault_ca_bundle_base64 = module.tls_certs_new_global.tls_ca_bundle_base64
+  kv_vault_cert_base64      = module.tls_certs_newer_global.tls_fullchain_base64
+  kv_vault_privkey_base64   = module.tls_certs_newer_global.tls_privkey_base64
+  kv_vault_ca_bundle_base64 = module.tls_certs_newer_global.tls_ca_bundle_base64
 }
 
 # Auto-unseal key
@@ -186,31 +186,31 @@ resource "azurerm_key_vault_key" "vault_unseal_key_dr" {
 # VNet Peering Between Central US and West Central US
 #------------------------------------------------------------------------------
 
-# Peering: Central US -> West Central US
-# resource "azurerm_virtual_network_peering" "centralus_to_westcentralus" {
-#   name                      = "peer-centralus-to-westcentralus"
-#   resource_group_name       = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
-#   virtual_network_name      = module.vault_prereqs.vnet_name
-#   remote_virtual_network_id = module.vault_prereqs_dr.vnet_id
+# Peering: Central US -> Canada Central
+resource "azurerm_virtual_network_peering" "centralus_to_candacentral" {
+  name                      = "peer-centralus-to-candacentral"
+  resource_group_name       = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
+  virtual_network_name      = module.vault_prereqs.vnet_name
+  remote_virtual_network_id = module.vault_prereqs_dr.vnet_id
 
-#   allow_virtual_network_access = true
-#   allow_forwarded_traffic      = false
-#   allow_gateway_transit        = false
-#   use_remote_gateways          = false
-# }
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = false
+  allow_gateway_transit        = false
+  use_remote_gateways          = false
+}
 
-# # Peering: West Central US -> Central US
-# resource "azurerm_virtual_network_peering" "westcentralus_to_centralus" {
-#   name                      = "peer-westcentralus-to-centralus"
-#   resource_group_name       = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.resource_group_name
-#   virtual_network_name      = module.vault_prereqs_dr.vnet_name
-#   remote_virtual_network_id = module.vault_prereqs.vnet_id
+# Peering: Canada Central -> Central US
+resource "azurerm_virtual_network_peering" "candacentral_to_centralus" {
+  name                      = "peer-candacentral-to-centralus"
+  resource_group_name       = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.resource_group_name
+  virtual_network_name      = module.vault_prereqs_dr.vnet_name
+  remote_virtual_network_id = module.vault_prereqs.vnet_id
 
-#   allow_virtual_network_access = true
-#   allow_forwarded_traffic      = false
-#   allow_gateway_transit        = false
-#   use_remote_gateways          = false
-# }
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = false
+  allow_gateway_transit        = false
+  use_remote_gateways          = false
+}
 
 #------------------------------------------------------------------------------
 # NSG Rules for Cross-Region Vault Communication
