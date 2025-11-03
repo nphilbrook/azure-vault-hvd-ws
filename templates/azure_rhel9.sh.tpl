@@ -140,7 +140,14 @@ function custom_steps() {
   local os_distro="$1"
 
   if [[ "$os_distro" == "rhel" ]]; then
-    log "INFO" "Custom RHEL steps here - need to disable firewalld"
+    if systemctl is-active --quiet firewalld; then
+      log "INFO" "Stopping firewalld"
+      systemctl stop firewalld
+    fi
+    if systemctl is-enabled --quiet firewalld; then
+      log "INFO" "Disabling firewalld"
+      systemctl disable firewalld
+    fi
   fi
 }
 
