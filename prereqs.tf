@@ -1,15 +1,3 @@
-# Removed from state but still valid for now until expiry. The DNS zone is gonezo.
-# module "tls_certs" {
-#   source  = "app.terraform.io/philbrook/tls-azurerm/acme"
-#   version = "0.0.2"
-
-#   dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name
-#   dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
-#   tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.zone_name}"
-#   tls_cert_email_address       = var.cert_email
-#   create_cert_files            = false
-# }
-
 module "tls_certs_new_global" {
   source  = "app.terraform.io/philbrook/tls-azurerm/acme"
   version = "0.0.3-alpha2"
@@ -36,6 +24,7 @@ module "tls_certs_newer_global" {
   dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
   tls_cert_fqdn                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
   tls_cert_sans = [
+    "vault-primary.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
     "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
   ]
   tls_cert_email_address = var.cert_email
