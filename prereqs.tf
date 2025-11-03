@@ -108,7 +108,7 @@ module "vault_prereqs_east2" {
   version = "1.0.0"
 
   # --- Common --- #
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.environment
+  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.environment}-dr"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.location
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.resource_group_name
   create_resource_group = false
