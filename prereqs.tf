@@ -50,7 +50,7 @@ module "tls_certs_newer_global" {
 
 module "vault_prereqs" {
   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  version = "1.0.0"
+  version = "1.0.1"
 
   # --- Common --- #
   friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
@@ -126,7 +126,7 @@ resource "azurerm_key_vault_key" "vault_unseal_key" {
 
 # module "vault_prereqs_east2" {
 #   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-#   version = "1.0.0"
+#   version = "1.0.1"
 
 #   # --- Common --- #
 #   friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.eastus2.environment}dr"
@@ -203,7 +203,7 @@ resource "azurerm_key_vault_key" "vault_unseal_key" {
 
 # module "vault_prereqs_dr" {
 #   source  = "app.terraform.io/philbrook/prereqs/azurerm"
-#   version = "1.0.0"
+#   version = "1.0.1"
 
 #   # --- Common --- #
 #   friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.environment}dr"
