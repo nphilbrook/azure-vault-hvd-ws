@@ -39,7 +39,7 @@ module "vault_hvd" {
   #------------------------------------------------------------------------------
   vm_ssh_public_key = var.ssh_public_key
   vm_os_image       = "redhat9"
-  vm_admin_username = "admin"
+  vm_admin_username = "vaultadmin"
   # Default is 6
   #   vmss_vm_count     = var.vault_vms_count
   # default is "Standard_D2s_v5"
@@ -59,6 +59,7 @@ module "vault_ubuntu" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
+
   friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment}ubuntu"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   create_resource_group = false
@@ -150,7 +151,7 @@ module "vault_hvd_dr" {
   #------------------------------------------------------------------------------
   vm_ssh_public_key = var.ssh_public_key
   vm_os_image       = "redhat9"
-  vm_admin_username = "admin"
+  vm_admin_username = "vaultadmin"
   # Default is 6
   #   vmss_vm_count     = var.vault_vms_count
   # default is "Standard_D2s_v5"
