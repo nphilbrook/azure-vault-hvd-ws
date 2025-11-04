@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.5-alpha"
+  version = "0.1.6-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -13,13 +13,15 @@ module "vault_hvd" {
   #------------------------------------------------------------------------------
   # Networking
   #------------------------------------------------------------------------------
-  vnet_id                         = module.vault_prereqs.vnet_id
-  vault_subnet_id                 = module.vault_prereqs.vault_subnet_id
-  lb_subnet_id                    = module.vault_prereqs.vault_subnet_id
-  lb_is_internal                  = true
-  create_vault_private_dns_record = true
-  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
-  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+  vnet_id                                            = module.vault_prereqs.vnet_id
+  vault_subnet_id                                    = module.vault_prereqs.vault_subnet_id
+  lb_subnet_id                                       = module.vault_prereqs.vault_subnet_id
+  lb_is_internal                                     = true
+  create_vault_private_dns_record                    = true
+  private_dns_zone_name                              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+  private_dns_zone_rg                                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+  create_private_dns_zone_vnet_link                  = true
+  create_private_dns_zone_vnet_link_autoregistration = true
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
@@ -56,7 +58,7 @@ module "vault_hvd" {
 
 module "vault_hvd_dr" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.5-alpha"
+  version = "0.1.6-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -69,13 +71,15 @@ module "vault_hvd_dr" {
   #------------------------------------------------------------------------------
   # Networking
   #------------------------------------------------------------------------------
-  vnet_id                         = module.vault_prereqs_dr.vnet_id
-  vault_subnet_id                 = module.vault_prereqs_dr.vault_subnet_id
-  lb_subnet_id                    = module.vault_prereqs_dr.vault_subnet_id
-  lb_is_internal                  = true
-  create_vault_private_dns_record = true
-  private_dns_zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
-  private_dns_zone_rg             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+  vnet_id                                            = module.vault_prereqs_dr.vnet_id
+  vault_subnet_id                                    = module.vault_prereqs_dr.vault_subnet_id
+  lb_subnet_id                                       = module.vault_prereqs_dr.vault_subnet_id
+  lb_is_internal                                     = true
+  create_vault_private_dns_record                    = true
+  private_dns_zone_name                              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+  private_dns_zone_rg                                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+  create_private_dns_zone_vnet_link                  = true
+  create_private_dns_zone_vnet_link_autoregistration = true
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
