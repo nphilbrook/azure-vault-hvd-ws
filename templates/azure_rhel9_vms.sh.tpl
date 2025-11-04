@@ -308,7 +308,7 @@ storage "raft" {
   autopilot_redundancy_zone = "zone-$AVAILABILITY_ZONE"
 
   retry_join {
-    auto_join             = "provider=azure subscription_id=$SUBSCRIPTION_ID resource_group=$RESOURCE_GROUP_NAME tag_key=VaultCluster tag_value=${friendly_name_prefix} https=true"
+    auto_join             = "provider=azure subscription_id=$SUBSCRIPTION_ID tag_key=VaultCluster tag_value=${friendly_name_prefix} https=true"
     auto_join_scheme      = "https"
 %{ if vault_tls_ca_bundle_keyvault_secret_id != "NONE" ~}
     leader_ca_cert_file   = "$VAULT_DIR_TLS/ca.pem"
