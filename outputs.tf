@@ -1,3 +1,3 @@
-output "vault_cli_config" {
-  value = nonsensitive(module.vault_hvd.vault_cli_config)
-}
+# output "vault_cli_config" {
+#   value = nonsensitive(module.vault_hvd.vault_cli_config)
+# }

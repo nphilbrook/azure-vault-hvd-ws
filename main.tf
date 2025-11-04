@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.6-alpha"
+  version = "0.1.7-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -53,12 +53,12 @@ module "vault_hvd" {
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
   vault_version                  = "1.21.0+ent"
-  custom_startup_script_template = "azure_rhel9.sh.tpl"
+  custom_startup_script_template = "azure_rhel9_vms.sh.tpl"
 }
 
 module "vault_hvd_dr" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.6-alpha"
+  version = "0.1.7-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ module "vault_hvd_dr" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
   vault_version                  = "1.21.0+ent"
-  custom_startup_script_template = "azure_rhel9.sh.tpl"
+  custom_startup_script_template = "azure_rhel9_vms.sh.tpl"
 }
 
 # TODO: global DNS with Azure Traffic Manager
