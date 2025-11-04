@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.8-alpha"
+  version = "0.1.9-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -42,6 +42,7 @@ module "vault_hvd" {
   vm_ssh_public_key = var.ssh_public_key
   vm_os_image       = "redhat9"
   vm_admin_username = "vaultadmin"
+  vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   # Default is 6
   #   vmss_vm_count     = var.vault_vms_count
   # default is "Standard_D2s_v5"
@@ -58,7 +59,7 @@ module "vault_hvd" {
 
 module "vault_hvd_dr" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.8-alpha"
+  version = "0.1.9-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -100,6 +101,7 @@ module "vault_hvd_dr" {
   vm_ssh_public_key = var.ssh_public_key
   vm_os_image       = "redhat9"
   vm_admin_username = "vaultadmin"
+  vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   # Default is 6
   #   vmss_vm_count     = var.vault_vms_count
   # default is "Standard_D2s_v5"

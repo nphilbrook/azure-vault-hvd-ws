@@ -281,7 +281,11 @@ function retrieve_license_from_kv() {
 }
 
 function generate_vault_config {
+%{ if vm_domain_suffix == "NONE" ~}
   FULL_HOSTNAME="$(hostname -f)"
+%{ else ~}
+  FULL_HOSTNAME="$(hostname -s).${vm_domain_suffix}"
+%{ endif ~}
 
   sudo bash -c "cat > $VAULT_DIR_CONFIG/server.hcl" <<EOF
 disable_mlock = ${vault_disable_mlock}
