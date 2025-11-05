@@ -117,5 +117,13 @@ module "vault_hvd_dr" {
   custom_startup_script_template = "azure_rhel9_vms.sh.tpl"
 }
 
-# TODO: global DNS with Azure Traffic Manager
+# TODO: vault.dev.azure DNS record
 
+resource "azurerm_private_dns_cname_record" "vault" {
+  name                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
+  resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
+  zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_nam
+  ttl                 = 60
+  record              = "vault-primary.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
+  tags                = local.default_tags
+}
