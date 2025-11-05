@@ -122,7 +122,7 @@ module "vault_hvd_dr" {
 resource "azurerm_private_dns_cname_record" "vault" {
   name                = "vault.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
   resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
-  zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_nam
+  zone_name           = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   ttl                 = 60
   record              = "vault-primary.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
   tags                = local.default_tags
