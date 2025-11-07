@@ -120,7 +120,7 @@ module "vault_hvd_dr" {
 # 2nd DR cluster to validate some PKI assumptions
 module "vault_hvd_dr2" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.12-alpha"
+  version = "0.1.13-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
