@@ -15,7 +15,7 @@ resource "azurerm_lb" "vault_ss" {
   frontend_ip_configuration {
     name                          = "vault-frontend-${local.prefix}"
     zones                         = ["1", "2", "3"]
-    subnet_id                     = module.vault_prereqs.lb_subnet_id
+    subnet_id                     = module.vault_prereqs.vault_subnet_id
     private_ip_address_allocation = "Dynamic"
   }
 
