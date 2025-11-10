@@ -26,3 +26,13 @@ variable "temp_cert_key" {
   type      = string
   sensitive = true
 }
+
+variable "vmss_vm_count" {
+  type    = number
+  default = 6
+}
+
+variable "friendly_name_prefix" {
+  type    = string
+  default = "manual"
+}
