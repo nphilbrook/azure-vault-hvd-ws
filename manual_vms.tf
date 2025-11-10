@@ -1,3 +1,7 @@
+# RUNNING STATE:
+# 0 is toast
+# 1 is toast
+
 locals {
   resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
 }
@@ -55,7 +59,7 @@ resource "azurerm_linux_virtual_machine" "vault_vm" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = ["/subscriptions/9d1e3560-fd29-4207-be8f-c6f9f0f1b64d/resourceGroups/dev-canadacentral/providers/Microsoft.ManagedIdentity/userAssignedIdentities/devdr2-vault-msi"]
+    identity_ids = ["/subscriptions/9d1e3560-fd29-4207-be8f-c6f9f0f1b64d/resourceGroups/dev-centralus/providers/Microsoft.ManagedIdentity/userAssignedIdentities/dev-vault-msi"]
   }
 
   admin_ssh_key {
