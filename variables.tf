@@ -29,7 +29,7 @@ variable "temp_cert_key" {
 
 variable "vmss_vm_count" {
   type    = number
-  default = 4
+  default = 2
 }
 
 variable "friendly_name_prefix" {

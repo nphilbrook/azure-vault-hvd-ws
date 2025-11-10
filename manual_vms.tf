@@ -1,6 +1,6 @@
 # RUNNING STATE:
-# 3 has the successful config
-# The rest are tabula rasa
+# 
+# 
 
 locals {
   resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
