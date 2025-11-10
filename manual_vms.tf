@@ -16,10 +16,6 @@ resource "azurerm_network_interface" "vault_nic" {
     name                          = "internal"
     subnet_id                     = module.vault_prereqs.vault_subnet_id
     private_ip_address_allocation = "Dynamic"
-    # TODO: this vv
-    # load_balancer_backend_address_pool_ids = [
-    #   azurerm_lb_backend_address_pool.vault_servers[0].id,
-    # ]
   }
   tags = merge(
     # CRITICAL - this tag is critical for the auto-join feature to work
