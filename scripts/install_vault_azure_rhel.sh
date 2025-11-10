@@ -1,4 +1,9 @@
 #! /bin/bash
+
+# This script is based on the template that ships with the HVD module for installing Vault on Azure VMs:
+# https://github.com/hashicorp/terraform-azurerm-vault-enterprise-hvd/blob/098d644baf6253d705b9aa9b3fee0acaf9372646/templates/custom_data.sh.tpl
+# Changes have been made to support using it independently of the module.
+
 set -euo pipefail
 
 # These variables will need to be updated per-environment / location!
