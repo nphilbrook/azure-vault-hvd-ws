@@ -1,5 +1,8 @@
+# These VMs are for testing my manual shell install script in scripts/install_vault_azure_rhel.sh
+# They intentionally don't run a custom_data script.
+
 # RUNNING STATE:
-# 
+# 0 is in the cluster
 # 
 
 locals {
@@ -7,7 +10,7 @@ locals {
 }
 
 resource "azurerm_network_interface" "vault_nic" {
-  count               = var.vmss_vm_count
+  count               = var.manual_vm_count
   resource_group_name = local.resource_group_name
   location            = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   name                = "${var.friendly_name_prefix}-vault-vm-nic-${count.index}"
@@ -25,7 +28,7 @@ resource "azurerm_network_interface" "vault_nic" {
 }
 
 resource "azurerm_lb_backend_address_pool_address" "vault_pool_address" {
-  count                   = var.vmss_vm_count
+  count                   = var.manual_vm_count
   name                    = "${var.friendly_name_prefix}-vault-lb-backend-${count.index}"
   backend_address_pool_id = "/subscriptions/9d1e3560-fd29-4207-be8f-c6f9f0f1b64d/resourceGroups/dev-centralus/providers/Microsoft.Network/loadBalancers/dev-vault-lb/backendAddressPools/dev-vault-backend"
   virtual_network_id      = module.vault_prereqs.vnet_id
@@ -40,7 +43,7 @@ data "azurerm_platform_image" "latest_os_image" {
 }
 
 resource "azurerm_linux_virtual_machine" "vault_vm" {
-  count               = var.vmss_vm_count
+  count               = var.manual_vm_count
   name                = "${var.friendly_name_prefix}-vault-${count.index}"
   resource_group_name = local.resource_group_name
   location            = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
@@ -88,7 +91,7 @@ resource "azurerm_linux_virtual_machine" "vault_vm" {
 }
 
 resource "azurerm_managed_disk" "vault_data" {
-  count                = var.vmss_vm_count
+  count                = var.manual_vm_count
   name                 = "${var.friendly_name_prefix}-vault-data-disk-${count.index}"
   location             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   resource_group_name  = local.resource_group_name
@@ -101,7 +104,7 @@ resource "azurerm_managed_disk" "vault_data" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "vault_data_attachment" {
-  count              = var.vmss_vm_count
+  count              = var.manual_vm_count
   managed_disk_id    = azurerm_managed_disk.vault_data[count.index].id
   virtual_machine_id = azurerm_linux_virtual_machine.vault_vm[count.index].id
   lun                = "0"

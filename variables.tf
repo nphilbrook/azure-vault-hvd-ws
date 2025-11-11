@@ -27,9 +27,9 @@ variable "temp_cert_key" {
   sensitive = true
 }
 
-variable "vmss_vm_count" {
+variable "manual_vm_count" {
   type    = number
-  default = 1
+  default = 3
 }
 
 variable "friendly_name_prefix" {
