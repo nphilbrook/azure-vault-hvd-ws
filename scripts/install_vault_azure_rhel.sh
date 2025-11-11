@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-# These variables will need to be updated per-environment / location!
+# These variables will need to be updated per-environment / location, or for version upgrades
 VAULT_TLS_CERT_KEYVAULT_SECRET_ID="https://dev-preqs-kv.vault.azure.net/secrets/vault-cert/3beeabd6a45f4a5eb28fa6746717f20d"
 VAULT_TLS_PRIVKEY_KEYVAULT_SECRET_ID="https://dev-preqs-kv.vault.azure.net/secrets/vault-privkey/2fb1471897494fd19e1ff868b5fa1593"
 VAULT_TLS_CA_BUNDLE_KEYVAULT_SECRET_ID="NONE"
@@ -18,6 +18,10 @@ VAULT_LEADER_TLS_SERVERNAME="vault-primary.dev.azure.nick-philbrook.sbx.hashidem
 VAULT_SEAL_AZUREKEYVAULT_VAULT_NAME="dev-preqs-kv"
 VAULT_SEAL_AZUREKEYVAULT_UNSEAL_KEY_NAME="vault-unseal-key-001"
 VAULT_VERSION="1.21.0+ent"
+# Reference https://developer.hashicorp.com/vault/docs/secrets/databases/oracle#setup for version
+ORACLE_CLIENT_MAJOR_VERSION="19"
+ORACLE_CLIENT_MINOR_VERSION="26"
+ORACLE_VAULT_PLUGIN_VERSION="0.13.0+ent"
 
 # These are unlikely to need to be changed per-env
 VAULT_DISABLE_MLOCK="true"
@@ -40,6 +44,7 @@ VAULT_DIR_LICENSE="/opt/vault/license"
 VAULT_DIR_PLUGINS="/opt/vault/plugins"
 VAULT_DIR_LOGS="/var/log/vault"
 VAULT_DIR_BIN="/usr/bin"
+VAULT_DIR_ORACLE_CLIENT="/opt/oracle"
 VAULT_USER="vault"
 VAULT_GROUP="vault"
 PRODUCT="vault"
@@ -202,7 +207,7 @@ function user_group_create {
 # directory_creates creates the necessary directories for Vault
 function directory_create {
   # Define all directories needed as an array
-  directories=( $VAULT_DIR_CONFIG $VAULT_DIR_DATA $VAULT_DIR_PLUGINS $VAULT_DIR_TLS $VAULT_DIR_LICENSE $VAULT_DIR_LOGS )
+  directories=( $VAULT_DIR_CONFIG $VAULT_DIR_DATA $VAULT_DIR_PLUGINS $VAULT_DIR_TLS $VAULT_DIR_LICENSE $VAULT_DIR_LOGS $VAULT_DIR_ORACLE_CLIENT )
 
   # Loop through each item in the array; create the directory and configure permissions
   for directory in "${directories[@]}"; do
@@ -271,18 +276,20 @@ function install_vault_binary {
   log "INFO" "Vault binary installed successfully at $VAULT_DIR_BIN/vault"
 }
 
-# TODO: re-write this for Oracle, including the client libs
-#function install_vault_plugins {
-  # %{ for p in vault_plugin_urls ~}
-  # sudo curl -s --output-dir $VAULT_DIR_PLUGINS -O ${p}
-  # sudo unzip -o $VAULT_DIR_PLUGINS/$(basename ${p}) -d $VAULT_DIR_PLUGINS
-  # rm $VAULT_DIR_PLUGINS/$(basename ${p})
-  # chown 0700 $VAULT_DIR_PLUGINS/$(basename ${p} | cut -d '_' -f 1)
-  # %{ endfor ~}
+# Install Oracle client libraries and the Vault plugin
+function install_oracle_plugin {
+  # pushd $VAULT_DIR_ORACLE_CLIENT
+  sudo curl -s --output-dir $VAULT_DIR_ORACLE_CLIENT -O https://download.oracle.com/otn_software/linux/instantclient/${ORACLE_CLIENT_MAJOR_VERSION}${ORACLE_CLIENT_MINOR_VERSION}/instantclient-basiclite-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip
+  sudo unzip -o $VAULT_DIR_ORACLE_CLIENT/instantclient-basiclite-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip -d $VAULT_DIR_ORACLE_CLIENT
+  sudo rm $VAULT_DIR_ORACLE_CLIENT/instantclient-basiclite-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip
+  sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_ORACLE_CLIENT
 
-  # chmod 0700 $VAULT_DIR_PLUGINS
-  # sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_PLUGINS
-#}
+  
+  sudo curl -s --output-dir $VAULT_DIR_PLUGINS -O https://releases.hashicorp.com/vault-plugin-database-oracle/${ORACLE_VAULT_PLUGIN_VERSION}/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
+  sudo unzip -o $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip -d $VAULT_DIR_PLUGINS
+  sudo rm $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
+  sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_PLUGINS
+}
 
 function retrieve_certs_from_kv() {
   log "INFO" "Retrieving TLS certificate '$VAULT_TLS_CERT_KEYVAULT_SECRET_ID' from Key Vault."
@@ -435,6 +442,7 @@ EOF
   bash -c "cat > /etc/systemd/system/vault.service.d/override.conf" <<EOF
 [Service]
 Environment="VAULT_ENABLE_FILE_PERMISSIONS_CHECK=true"
+Environment=LD_LIBRARY_PATH=/opt/oracle/instantclient_${ORACLE_CLIENT_MAJOR_VERSION}_${ORACLE_CLIENT_MINOR_VERSION}
 EOF
   chmod 0600 /etc/systemd/system/vault.service.d/override.conf
 }
@@ -531,8 +539,8 @@ main() {
   log "INFO" "Installing Vault"
   install_vault_binary $OS_ARCH
 
-  # log "INFO" "Installing Vault plugins"
-  # install_vault_plugins
+  log "INFO" "Installing Oracle plugin and dependencies"
+  install_oracle_plugin
 
   log "INFO" "Retrieving Vault license file from Key Vault"
   retrieve_license_from_kv
