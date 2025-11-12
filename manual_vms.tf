@@ -22,7 +22,7 @@ resource "azurerm_network_interface" "vault_nic" {
   }
   tags = merge(
     # CRITICAL - this tag is critical for the auto-join feature to work
-    { "VaultCluster" = var.friendly_name_prefix },
+    { "VaultCluster" = "dev" },
     local.default_tags
   )
 }
