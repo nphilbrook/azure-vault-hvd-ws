@@ -164,7 +164,7 @@ function install_packages() {
     apt-get update -y
     apt-get install -y $REQUIRED_PACKAGES $ADDITIONAL_PACKAGES
   elif [[ "$os_distro" == "centos" ]] || [[ "$os_distro" == "rhel" ]]; then
-    yum install -y $REQUIRED_PACKAGES $ADDITIONAL_PACKAGES
+    dnf install -y $REQUIRED_PACKAGES $ADDITIONAL_PACKAGES
   else
     log "ERROR" "Unable to determine package manager"
   fi
@@ -278,14 +278,15 @@ function install_vault_binary {
 
 # Install Oracle client libraries and the Vault plugin
 function install_oracle_plugin {
-  # pushd $VAULT_DIR_ORACLE_CLIENT
-  sudo curl -s --output-dir $VAULT_DIR_ORACLE_CLIENT -O https://download.oracle.com/otn_software/linux/instantclient/${ORACLE_CLIENT_MAJOR_VERSION}${ORACLE_CLIENT_MINOR_VERSION}/instantclient-basiclite-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip
-  sudo unzip -o $VAULT_DIR_ORACLE_CLIENT/instantclient-basiclite-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip -d $VAULT_DIR_ORACLE_CLIENT
-  sudo rm $VAULT_DIR_ORACLE_CLIENT/instantclient-basiclite-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip
+  log "INFO" "Installing Oracle client libraries and dependencies"
+  sudo curl --fail-with-body -s --output-dir $VAULT_DIR_ORACLE_CLIENT -O https://download.oracle.com/otn_software/linux/instantclient/${ORACLE_CLIENT_MAJOR_VERSION}${ORACLE_CLIENT_MINOR_VERSION}000/instantclient-basic-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip
+  sudo unzip -o $VAULT_DIR_ORACLE_CLIENT/instantclient-basic-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip -d $VAULT_DIR_ORACLE_CLIENT
+  sudo rm $VAULT_DIR_ORACLE_CLIENT/instantclient-basic-linux.x64-${ORACLE_CLIENT_MAJOR_VERSION}.${ORACLE_CLIENT_MINOR_VERSION}.0.0.0dbru.zip
   sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_ORACLE_CLIENT
-
+  sudo dnf install -y libnsl libaio glibc
   
-  sudo curl -s --output-dir $VAULT_DIR_PLUGINS -O https://releases.hashicorp.com/vault-plugin-database-oracle/${ORACLE_VAULT_PLUGIN_VERSION}/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
+  log "INFO" "Installing Vault Oracle database plugin"
+  sudo curl --fail-with-body -s --output-dir $VAULT_DIR_PLUGINS -O https://releases.hashicorp.com/vault-plugin-database-oracle/${ORACLE_VAULT_PLUGIN_VERSION}/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
   sudo unzip -o $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip -d $VAULT_DIR_PLUGINS
   sudo rm $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
   sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_PLUGINS
