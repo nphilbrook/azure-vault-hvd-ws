@@ -2,7 +2,7 @@
 # They intentionally don't run a custom_data script.
 
 # RUNNING STATE:
-# 0-2 are provisioned but shut down to test final version of script
+# 0-2 are blank 
 # 3-5 are active cluster
 
 locals {
