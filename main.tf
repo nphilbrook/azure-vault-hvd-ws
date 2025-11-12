@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.12-alpha"
+  version = "0.1.14-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -44,8 +44,8 @@ module "vault_hvd" {
   vm_os_image       = "redhat9"
   vm_admin_username = "vaultadmin"
   vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
-  # Default is 6
-  #   vmss_vm_count     = var.vault_vms_count
+  # In this workspace no longer using these VMs - see manual_vms.txt :grimacing:
+  vmss_vm_count = 0
   # default is "Standard_D2s_v5"
   # vm_sku            = "Standard_D2as_v6" # try Standard_D2ds_v6
 
@@ -120,7 +120,7 @@ module "vault_hvd" {
 # 2nd DR cluster to validate some PKI assumptions
 module "vault_hvd_dr2" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.13-alpha"
+  version = "0.1.14-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------

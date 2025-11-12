@@ -287,9 +287,11 @@ function install_oracle_plugin {
   
   log "INFO" "Installing Vault Oracle database plugin"
   sudo curl --fail-with-body -s --output-dir $VAULT_DIR_PLUGINS -O https://releases.hashicorp.com/vault-plugin-database-oracle/${ORACLE_VAULT_PLUGIN_VERSION}/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
-  sudo unzip -o $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip -d $VAULT_DIR_PLUGINS
+  # This is the new Enterprise plugin directory structure required
+  sudo mkdir -p $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64
+  sudo unzip -o $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip -d $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64
   sudo rm $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
-  sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_PLUGINS
+  sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64
 }
 
 function retrieve_certs_from_kv() {
