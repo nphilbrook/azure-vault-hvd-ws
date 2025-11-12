@@ -292,6 +292,9 @@ function install_oracle_plugin {
   sudo unzip -o $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip -d $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64
   sudo rm $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64.zip
   sudo chown -R $VAULT_USER:$VAULT_GROUP $VAULT_DIR_PLUGINS/vault-plugin-database-oracle_${ORACLE_VAULT_PLUGIN_VERSION}_linux_amd64
+
+  # Once the Vault cluster is running, this command must be run as well:
+  # vault plugin register -version=v0.13.0+ent database vault-plugin-database-oracle
 }
 
 function retrieve_certs_from_kv() {
