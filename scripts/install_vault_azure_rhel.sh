@@ -437,7 +437,8 @@ RestartSec=5
 TimeoutStopSec=30
 LimitNOFILE=65536
 LimitMEMLOCK=infinity
-
+StandardOutput=append:/var/log/vault/operational.log
+StandardError=append:/var/log/vault/operational.log
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -455,7 +456,10 @@ EOF
 
 function generate_vault_logrotate {
   bash -c "cat > /etc/logrotate.d/vault" <<-EOF
-  /var/log/vault/*.log {
+  # NOTE: the file pattern defined here for audit logs must match
+  # how audit logs are enabled after the cluster is initialized.
+  # E.g.: vault audit enable file file_path=/var/log/vault/audit.log
+  /var/log/vault/*audit*.log {
     daily
     size 100M
     rotate 32
@@ -470,6 +474,24 @@ function generate_vault_logrotate {
     postrotate
       systemctl reload vault > /dev/null 2>&1 || true
     endscript
+  }
+
+  # This file pattern is defined in the install script
+  # and in the systemd unit file and should be good
+  /var/log/vault/operational.log {
+    daily
+    # This is required as systemd doesn't respect the SIGHUP
+    copytruncate
+    size 100M
+    rotate 32
+    dateext
+    dateformat .%Y%m%d_%H%M%S
+    missingok
+    notifempty
+    nocreate
+    compress
+    delaycompress
+    sharedscripts
   }
 EOF
 }
