@@ -2,8 +2,8 @@
 # They intentionally don't run a custom_data script.
 
 # RUNNING STATE:
-# 0-2 are blank 
-# 3-5 are active cluster
+# 0-2 are active cluster with most recent install script
+# 3-5 are installed but turned off
 
 locals {
   resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
