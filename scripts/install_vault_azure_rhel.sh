@@ -121,7 +121,7 @@ function install_azcli() {
       curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     elif [[ "$OS_DISTRO" == "rhel" || "$OS_DISTRO" == "centos" ]]; then
       log "INFO" "Installing Azure CLI for RHEL $OS_MAJOR_VERSION."
-			rpm --import https://packages.microsoft.com/keys/microsoft.asc
+      rpm --import https://packages.microsoft.com/keys/microsoft.asc
       dnf install -y https://packages.microsoft.com/config/rhel/$OS_MAJOR_VERSION/packages-microsoft-prod.rpm
       dnf install -y azure-cli
     fi
