@@ -29,7 +29,7 @@ variable "temp_cert_key" {
 
 variable "manual_vm_count" {
   type    = number
-  default = 6
+  default = 0
 }
 
 variable "friendly_name_prefix" {
