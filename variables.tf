@@ -22,11 +22,6 @@ variable "vault_license" {
   sensitive = true
 }
 
-variable "temp_cert_key" {
-  type      = string
-  sensitive = true
-}
-
 variable "manual_vm_count" {
   type    = number
   default = 0
