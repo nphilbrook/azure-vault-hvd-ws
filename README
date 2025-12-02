@@ -8,3 +8,6 @@ Then to create the KVs before they are looked up with daat:
 -target module.vault_prereqs -target module.vault_prereqs_dr
 
 THEN the whole potato
+
+For destroy:
+* a partial destroy with error will need more targeting....
