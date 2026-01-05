@@ -74,7 +74,6 @@ module "vault_prereqs" {
 
 # Auto-unseal key
 # Requires a KVAP with GetRotationPolicy (and other stuff)
-# Should probably make this depend on the full module above (KVAP needs to be created)
 resource "azurerm_key_vault_key" "vault_unseal_key" {
   name         = "vault-unseal-key-001"
   key_vault_id = module.vault_prereqs.key_vault_id
@@ -89,6 +88,9 @@ resource "azurerm_key_vault_key" "vault_unseal_key" {
     "wrapKey",
     "unwrapKey",
   ]
+
+  # A permission resource in this module must be in place before Terraform can create the key
+  depends_on = [module.vault_prereqs]
 }
 
 module "vault_prereqs_dr" {
@@ -150,7 +152,7 @@ module "vault_prereqs_dr" {
 }
 
 # Auto-unseal key
-# Requires a KVAP with GetRotationPolicy (and other stuff)
+# Requires a KVAP with GetRotationPolicy (and other stuff) - it's all in the module above
 resource "azurerm_key_vault_key" "vault_unseal_key_dr" {
   name         = "vault-unseal-key-001"
   key_vault_id = module.vault_prereqs_dr.key_vault_id
