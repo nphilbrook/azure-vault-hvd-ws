@@ -16,10 +16,10 @@ module "tls_certs_newer_global" {
 }
 
 module "vault_prereqs" {
-  # Revert to this for Stacks unless they add an SSH key capability
-  # source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  # version = "1.0.1"
-  source = "git::ssh://git@github.com/hashicorp-services/terraform-azurerm-prereqs.git//?ref=8186a6531d65c47614c5fcdf4a39c5a81569601e"
+  # Use PMR for Stacks unless they add an SSH key capability
+  source  = "app.terraform.io/philbrook/prereqs/azurerm"
+  version = "1.0.1"
+  # source = "git::ssh://git@github.com/hashicorp-services/terraform-azurerm-prereqs.git//?ref=8186a6531d65c47614c5fcdf4a39c5a81569601e"
 
   # --- Common --- #
   friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
@@ -92,10 +92,10 @@ resource "azurerm_key_vault_key" "vault_unseal_key" {
 }
 
 module "vault_prereqs_dr" {
-  # Revert to this for Stacks unless they add an SSH key capability
-  # source  = "app.terraform.io/philbrook/prereqs/azurerm"
-  # version = "1.0.1"
-  source = "git::ssh://git@github.com/hashicorp-services/terraform-azurerm-prereqs.git//?ref=8186a6531d65c47614c5fcdf4a39c5a81569601e"
+  # Use PMR for Stacks unless they add an SSH key capability
+  source  = "app.terraform.io/philbrook/prereqs/azurerm"
+  version = "1.0.1"
+  # source = "git::ssh://git@github.com/hashicorp-services/terraform-azurerm-prereqs.git//?ref=8186a6531d65c47614c5fcdf4a39c5a81569601e"
 
   # --- Common --- #
   friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.environment}dr"
