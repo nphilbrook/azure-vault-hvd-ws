@@ -1,10 +1,11 @@
 Have to do an iterative apply if going from scratch here...
+`TF_CLI_ARGS` in the environment variables is your friend.
 
 To get around the "invalid count":
 
 -target module.tls_certs_newer_global
 
-Then to create the KVs before they are looked up with daat:
+Then to create the KVs before they are looked up with data:
 -target module.vault_prereqs -target module.vault_prereqs_dr
 
 THEN the whole potato

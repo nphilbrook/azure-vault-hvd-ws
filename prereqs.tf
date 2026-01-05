@@ -1,6 +1,8 @@
 module "tls_certs_newer_global" {
-  source  = "app.terraform.io/philbrook/tls-azurerm/acme"
-  version = "0.0.3-alpha2"
+  # Revert to this for Stacks unless they add an SSH key capability
+  # source  = "app.terraform.io/philbrook/tls-azurerm/acme"
+  # version = "0.0.3-alpha2"
+  source = "git::ssh://git@github.com/hashicorp-services/terraform-acme-tls-azurerm.git//?ref=3c05ecb95c9f9f637f2c2bccaccce7a515e2fdaa"
 
   dns_zone_name                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   dns_zone_resource_group_name = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
