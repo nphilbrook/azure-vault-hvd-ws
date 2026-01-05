@@ -62,7 +62,7 @@ module "vault_prereqs" {
 
   # Bastion
   bastion_ssh_public_key = var.ssh_public_key
-  bastion_size           = "Standard_B2s"
+  bastion_size           = "Standard_B2s_v2"
 
   # --- Key Vault "Bootstrap" Secrets --- #
   create_key_vault          = true
@@ -139,7 +139,7 @@ module "vault_prereqs_dr" {
 
   # Bastion
   bastion_ssh_public_key = var.ssh_public_key
-  bastion_size           = "Standard_B2s"
+  bastion_size           = "Standard_B2s_v2"
 
   # --- Key Vault "Bootstrap" Secrets --- #
   create_key_vault          = true
