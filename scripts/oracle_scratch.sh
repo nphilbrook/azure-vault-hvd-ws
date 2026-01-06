@@ -1,10 +1,24 @@
 vault plugin register -version=v0.13.0+ent database vault-plugin-database-oracle
+vault secrets enable database
 
-## ADD TO NESTOR'S ARTICLE
+## ADD TO NESTOR'S ARTICLE HERE https://hashicorp.atlassian.net/wiki/spaces/VSE/pages/2485714945/Oracle+Database+Secrets+engine
 
 podman pull container-registry.oracle.com/database/express:latest
 
 podman run   --rm    --detach       --name oraclexe       -p 1521:1521       -p 5500:5500       -e ORACLE_PWD=your_secure_password    container-registry.oracle.com/database/express:latest
+
+# Get a shell
+podman exec -it oraclexe /bin/bash
+# IN THE ORACLE CONTAINER 
+tee create_user.sql <<EOF
+alter session set container=XEPDB1;
+CREATE USER vault IDENTIFIED BY vaultpasswd;
+ALTER USER vault DEFAULT TABLESPACE USERS QUOTA UNLIMITED ON USERS;
+GRANT CREATE SESSION, RESOURCE , UNLIMITED TABLESPACE, DBA TO vault;
+exit;
+EOF
+sqlplus sys/your_secure_password@XEPDB1 AS SYSDBA @create_user.sql
+# END IN THE ORACLE CONTAINER
 
 
 # Had to run the create script twice? Logged in manually in between :Shrug:
@@ -16,11 +30,14 @@ vault write database/roles/my-role \
 
 vault write database/config/my-oracle-database \
      plugin_name=vault-plugin-database-oracle \
-     connection_url="{{username}}/{{password}}@dev-bastion.ysaddc5oq3cebc2m2idinljkia.gx.internal.cloudapp.net:1521/XEPDB1" \
+     connection_url="{{username}}/{{password}}@dev-bastion.dev.azure.nick-philbrook.sbx.hashidemos.io:1521/XEPDB1" \
      username="vault" \
      password="vaultpasswd" \
      allowed_roles=my-role \
-     max_connection_lifetime=60s    
+     max_connection_lifetime=60s
+
+# Now request a dynamic credential
+vault read database/creds/my-role
 
 # to test inside the container:
 sqlplus V_ROOT_MY_ROLE_VCJWCXMS9PG38W1/-Uu06biB-lkdzM3jjrNl@XEPDB1

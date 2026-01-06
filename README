@@ -1,3 +1,5 @@
+# TF notes
+
 Have to do an iterative apply if going from scratch here...
 `TF_CLI_ARGS` in the environment variables is your friend.
 
@@ -12,3 +14,12 @@ THEN the whole potato
 
 For destroy:
 * a partial destroy with error will need more targeting....
+
+# Bastion notes
+```
+apt-get install unzip podman
+curl -O https://releases.hashicorp.com/vault/1.21.1+ent/vault_1.21.1+ent_linux_amd64.zip
+unzip vault_1.21.1+ent_linux_amd64.zip vault
+sudo mv vault /usr/local/bin
+```
+(PACKER WHEN)
