@@ -55,7 +55,7 @@ module "vault_hvd" {
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
   vault_version                  = "1.21.0+ent"
-  custom_startup_script_template = "azure_rhel9_vms.sh.tpl"
+  custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
 }
 
 # 2nd DR cluster to validate some PKI assumptions
@@ -119,7 +119,7 @@ module "vault_hvd_dr2" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
   vault_version                  = "1.21.0+ent"
-  custom_startup_script_template = "azure_rhel9_vms.sh.tpl"
+  custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
 }
 
 resource "azurerm_private_dns_cname_record" "vault" {
