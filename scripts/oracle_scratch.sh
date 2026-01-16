@@ -41,3 +41,19 @@ vault read database/creds/my-role
 
 # to test inside the container:
 sqlplus V_ROOT_MY_ROLE_VCJWCXMS9PG38W1/-Uu06biB-lkdzM3jjrNl@XEPDB1
+
+# STATIC ROLE
+# Get a shell
+podman exec -it oraclexe /bin/bash
+# IN THE ORACLE CONTAINER 
+tee create_static_user.sql <<EOF
+alter session set container=XEPDB1;
+CREATE USER static IDENTIFIED BY vaultpasswd;
+ALTER USER static DEFAULT TABLESPACE USERS QUOTA UNLIMITED ON USERS;
+GRANT CREATE SESSION, RESOURCE , UNLIMITED TABLESPACE, DBA TO static;
+exit;
+EOF
+sqlplus sys/your_secure_password@XEPDB1 AS SYSDBA @create_static_user.sql
+# END IN THE ORACLE CONTAINER
+
+# I did the rest of the static stuff in the UI because customer, but it was easy
