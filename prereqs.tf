@@ -22,7 +22,7 @@ module "vault_prereqs" {
   source = "git::ssh://git@github.com/hashicorp-services/terraform-azurerm-prereqs.git//?ref=fff8791745621d01b9f0e642bed034cdcf213ffc"
 
   # --- Common --- #
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
+  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment}2"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
   create_resource_group = false
@@ -100,7 +100,7 @@ module "vault_prereqs_dr" {
   source = "git::ssh://git@github.com/hashicorp-services/terraform-azurerm-prereqs.git//?ref=fff8791745621d01b9f0e642bed034cdcf213ffc"
 
   # --- Common --- #
-  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.environment}dr"
+  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.environment}dr2"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.location
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.dr.resource_group_name
   create_resource_group = false
