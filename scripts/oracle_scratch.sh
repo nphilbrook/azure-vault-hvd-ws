@@ -5,7 +5,7 @@ vault secrets enable database
 
 podman pull container-registry.oracle.com/database/express:latest
 
-podman run   --rm    --detach       --name oraclexe       -p 1521:1521       -p 5500:5500       -e ORACLE_PWD=your_secure_password    container-registry.oracle.com/database/express:latest
+podman run --rm --detach --name oraclexe -p 1521:1521 -p 5500:5500 -e ORACLE_PWD=your_secure_password container-registry.oracle.com/database/express:latest
 
 # Get a shell
 podman exec -it oraclexe /bin/bash
@@ -30,7 +30,7 @@ vault write database/roles/my-role \
 
 vault write database/config/my-oracle-database \
      plugin_name=vault-plugin-database-oracle \
-     connection_url="{{username}}/{{password}}@dev-bastion.dev.azure.nick-philbrook.sbx.hashidemos.io:1521/XEPDB1" \
+     connection_url="{{username}}/{{password}}@dev2-bastion.dev.azure.nick-philbrook.sbx.hashidemos.io:1521/XEPDB1" \
      username="vault" \
      password="vaultpasswd" \
      allowed_roles=my-role \
@@ -57,3 +57,16 @@ sqlplus sys/your_secure_password@XEPDB1 AS SYSDBA @create_static_user.sql
 # END IN THE ORACLE CONTAINER
 
 # I did the rest of the static stuff in the UI because customer, but it was easy
+
+# CLI for static
+vault write database/config/oracle-static-database \
+     plugin_name=vault-plugin-database-oracle \
+     connection_url="{{username}}/{{password}}@dev2-bastion.dev.azure.nick-philbrook.sbx.hashidemos.io:1521/XEPDB1" \
+     allowed_roles=my-static-role \
+     self_managed=true
+
+vault write database/static-roles/my-static-role \
+    db_name=oracle-static-database \
+    username="static" \
+    password="vaultpasswd" \
+    rotation_period="1h"

@@ -21,5 +21,13 @@ apt-get install unzip podman
 curl -O https://releases.hashicorp.com/vault/1.21.1+ent/vault_1.21.1+ent_linux_amd64.zip
 unzip vault_1.21.1+ent_linux_amd64.zip vault
 sudo mv vault /usr/local/bin
+echo "export VAULT_ADDR=https://vault.dev.azure.nick-philbrook.sbx.hashidemos.io:8200/" >> .profile
+scp -i ~/.ssh/acme_corp_briefing .tmux.conf  ubuntu@dev2-bastion.bnd6fte7fmhncrfx.centralus.sysgen.cloudapp.azure.com:~/
+tee ~/.ssh/config <<EOF
+IdentityFile ~/.ssh/acme_corp_briefing
+User vaultadmin
+EOF
 ```
+scp key up there
+
 (PACKER WHEN)
