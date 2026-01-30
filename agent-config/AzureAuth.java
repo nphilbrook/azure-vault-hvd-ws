@@ -201,10 +201,11 @@ public class AzureAuth {
         System.out.println("Login URL: " + urlStr);
         
         // Build JSON payload (omitting subscription_id and resource_group_name)
-        String payload = String.format(
-            "{\"role\":\"%s\",\"jwt\":\"%s\",\"vm_name\":\"%s\"}",
-            role, jwt, metadata.vmName
-        );
+        JsonObject payloadObj = new JsonObject();
+        payloadObj.addProperty("role", role);
+        payloadObj.addProperty("jwt", jwt);
+        payloadObj.addProperty("vm_name", metadata.vmName);
+        String payload = gson.toJson(payloadObj);
         
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
