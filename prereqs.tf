@@ -31,7 +31,7 @@ module "vault_prereqs" {
   # --- DNS --- #
   # Created in azure-core-infra-ws since I needed it for TLS verification
   create_public_dns_zone = false
-  # Created manually for global DNS
+  # Created in azure-core-infra-ws for global DNS
   create_private_dns_zone = false
   # Created in the HVD module
   create_private_dns_zone_vnet_link = false
@@ -109,7 +109,7 @@ module "vault_prereqs_dr" {
   # --- DNS --- #
   # Created in azure-core-infra-ws since I needed it for TLS verification
   create_public_dns_zone = false
-  # Created manually for global DNS
+  # Created in azure-core-infra-ws for global DNS
   create_private_dns_zone = false
 
   # Created in the HVD module
