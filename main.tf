@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.14-alpha"
+  version = "0.2.0-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ module "vault_hvd" {
   vm_ssh_public_key = var.ssh_public_key
   vm_os_image       = "redhat9"
   vm_admin_username = "vaultadmin"
-  vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+  # vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
 
   vmss_vm_count = 3
   # default is "Standard_D2s_v5"
@@ -54,14 +54,14 @@ module "vault_hvd" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
-  vault_version                  = "1.21.0+ent"
-  custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
+  vault_version = "1.21.3+ent"
+  # custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
 }
 
 # 2nd DR cluster to validate some PKI assumptions
 module "vault_hvd_dr2" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.1.14-alpha"
+  version = "0.2.0-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ module "vault_hvd_dr2" {
   vm_ssh_public_key = var.ssh_public_key
   vm_os_image       = "redhat9"
   vm_admin_username = "vaultadmin"
-  vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
+  # vm_domain_suffix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   # Default is 6
   vmss_vm_count = 3
   # default is "Standard_D2s_v5"
@@ -118,8 +118,8 @@ module "vault_hvd_dr2" {
   # This won't work until we override the custom_data shell script to install the client libs - not in RHEL repos
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
-  vault_version                  = "1.21.0+ent"
-  custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
+  vault_version = "1.21.3+ent"
+  # custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
 }
 
 resource "azurerm_private_dns_cname_record" "vault" {
