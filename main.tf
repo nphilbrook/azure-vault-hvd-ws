@@ -54,8 +54,8 @@ module "vault_hvd" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
-  vault_version = "1.21.3+ent"
-  # custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
+  vault_version                  = "1.21.3+ent"
+  custom_startup_script_template = "custom_data.sh.tpl"
 }
 
 # 2nd DR cluster to validate some PKI assumptions
@@ -118,8 +118,8 @@ module "vault_hvd_dr2" {
   # This won't work until we override the custom_data shell script to install the client libs - not in RHEL repos
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
-  vault_version = "1.21.3+ent"
-  # custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
+  vault_version                  = "1.21.3+ent"
+  custom_startup_script_template = "custom_data.sh.tpl"
 }
 
 resource "azurerm_private_dns_cname_record" "vault" {
@@ -188,8 +188,8 @@ module "vault_hvd_rhel8" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
-  vault_version = "1.21.3+ent"
-  # custom_startup_script_template = "install_vault_azure_rhel.sh.tpl"
+  vault_version                  = "1.21.3+ent"
+  custom_startup_script_template = "custom_data.sh.tpl"
 }
 
 # module "vault_hvd_ubuntu22" {
