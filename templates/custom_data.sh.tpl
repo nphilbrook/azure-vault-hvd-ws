@@ -412,10 +412,17 @@ function configure_firewalld {
   log "DEBUG" "Checking status of DBUS."
   sudo systemctl status dbus
   if sudo systemctl is-active --quiet firewalld; then
-    while ! sudo firewall-cmd --state ; do
-      log "DEBUG" "Waiting for firewalld to be in a state where it can accept commands..."
-      #log "DEBUG" "firewalld state is '$STATE'."
-      log "DEBUG" "Sleeping for 5 seconds"
+    log "DEBUG" "firewalld unit is active. Waiting for firewall-cmd to become responsive..."
+    local retries=0
+    local max_retries=12
+    while ! sudo timeout 10 firewall-cmd --state 2>/dev/null; do
+      retries=$((retries + 1))
+      if [[ $retries -ge $max_retries ]]; then
+        log "ERROR" "firewall-cmd not responsive after $max_retries attempts. Continuing without firewall configuration."
+        set -euo pipefail
+        return 0
+      fi
+      log "DEBUG" "firewall-cmd not ready yet (attempt $retries/$max_retries). Sleeping 5 seconds..."
       sleep 5
     done
 
