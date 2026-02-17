@@ -408,12 +408,12 @@ EOF
 }
 
 function configure_firewalld {
-  set +eo pipefail
+  set +euo pipefail
+  log "DEBUG" "Checking status of DBUS."
+  sudo systemctl status dbus
   if sudo systemctl is-active --quiet firewalld; then
     while ! sudo firewall-cmd --state ; do
-      DBUS_STATE=$(sudo systemctl status dbus)
       log "DEBUG" "Waiting for firewalld to be in a state where it can accept commands..."
-      log "DEBUG" "dbus state is '$DBUS_STATE'."
       #log "DEBUG" "firewalld state is '$STATE'."
       log "DEBUG" "Sleeping for 5 seconds"
       sleep 5
@@ -428,7 +428,7 @@ function configure_firewalld {
   else
     log "INFO" "firewalld is not running. Skipping firewall configuration."
   fi
-  set -eo pipefail
+  set -euo pipefail
 }
 
 function start_enable_vault {
