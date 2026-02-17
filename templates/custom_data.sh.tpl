@@ -408,26 +408,16 @@ EOF
 }
 
 function configure_firewalld {
-  if sudo systemctl is-active --quiet firewalld; then
-    log "DEBUG" "firewalld unit is active. Waiting for firewall-cmd to become responsive..."
-    local retries=0
-    local max_retries=24 
-    while ! sudo timeout 10 firewall-cmd --state 2>/dev/null; do
-      retries=$((retries + 1))
-      if [[ $retries -ge $max_retries ]]; then
-        log "ERROR" "firewall-cmd not responsive after $max_retries attempts. Continuing without firewall configuration."
-        return 0
-      fi
-      log "DEBUG" "firewall-cmd not ready yet (attempt $retries/$max_retries). Sleeping 10 seconds..."
-      sleep 10
-    done
-
-    log "INFO" "firewalld is running. Opening Vault ports ${vault_port_api}/tcp and ${vault_port_cluster}/tcp."
-    sudo firewall-cmd --permanent --add-port={${vault_port_api},${vault_port_cluster}}/tcp
-    log "DEBUG" "ran add-port command for firewalld"
-
-    sudo firewall-cmd --reload
-    log "DEBUG" "ran reload command for firewalld"
+  if systemctl is-active --quiet firewalld; then
+    log "INFO" "firewalld is running. Opening Vault ports ${vault_port_api}/tcp and ${vault_port_cluster}/tcp via firewall-offline-cmd."
+    # Use firewall-offline-cmd to avoid D-Bus deadlock in cloud-init context.
+    # firewall-cmd hangs when called from cloud-init due to D-Bus communication
+    # issues with the firewalld daemon, but offline-cmd edits the config files directly.
+    firewall-offline-cmd --add-port=${vault_port_api}/tcp
+    firewall-offline-cmd --add-port=${vault_port_cluster}/tcp
+    log "DEBUG" "Reloading firewalld to apply changes."
+    systemctl reload firewalld
+    log "DEBUG" "firewalld configuration complete."
   else
     log "INFO" "firewalld is not running. Skipping firewall configuration."
   fi
