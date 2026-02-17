@@ -408,15 +408,15 @@ EOF
 }
 
 function configure_firewalld {
-  if systemctl is-active --quiet firewalld; then
+  if sudo systemctl is-active --quiet firewalld; then
     log "INFO" "firewalld is running. Opening Vault ports ${vault_port_api}/tcp and ${vault_port_cluster}/tcp via firewall-offline-cmd."
     # Use firewall-offline-cmd to avoid D-Bus deadlock in cloud-init context.
     # firewall-cmd hangs when called from cloud-init due to D-Bus communication
     # issues with the firewalld daemon, but offline-cmd edits the config files directly.
-    firewall-offline-cmd --add-port=${vault_port_api}/tcp
-    firewall-offline-cmd --add-port=${vault_port_cluster}/tcp
+    sudo firewall-offline-cmd --add-port=${vault_port_api}/tcp
+    sudo firewall-offline-cmd --add-port=${vault_port_cluster}/tcp
     log "DEBUG" "Reloading firewalld to apply changes."
-    systemctl reload firewalld
+    sudo systemctl reload firewalld
     log "DEBUG" "firewalld configuration complete."
   else
     log "INFO" "firewalld is not running. Skipping firewall configuration."

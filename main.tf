@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.2.4-alpha"
+  version = "0.2.5-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -55,13 +55,13 @@ module "vault_hvd" {
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
   vault_version                  = "1.21.3+ent"
-  custom_startup_script_template = "custom_data.sh.tpl"
+  # custom_startup_script_template = "custom_data.sh.tpl"
 }
 
 # 2nd DR cluster to validate some PKI assumptions
 module "vault_hvd_dr2" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.2.4-alpha"
+  version = "0.2.5-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -119,8 +119,8 @@ module "vault_hvd_dr2" {
   #   vault_plugin_urls        = ["https://releases.hashicorp.com/vault-plugin-database-oracle/0.13.0+ent/vault-plugin-database-oracle_0.13.0+ent_linux_amd64.zip"]
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
   vault_version                  = "1.21.3+ent"
-  custom_startup_script_template = "custom_data.sh.tpl"
-}
+  #  custom_startup_script_template = "custom_data.sh.tpl"
+ }
 
 resource "azurerm_private_dns_cname_record" "vault" {
   name                = "vault"
@@ -134,7 +134,7 @@ resource "azurerm_private_dns_cname_record" "vault" {
 ### testing firewalld change on other OSes
 module "vault_hvd_rhel8" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.2.4-alpha"
+  version = "0.2.5-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -189,12 +189,12 @@ module "vault_hvd_rhel8" {
   #   additional_package_names = ["oracle-instantclient-basiclite", "oracle-instantclient-sqlplus", "oracle-instantclient-devel"]
 
   vault_version                  = "1.21.3+ent"
-  custom_startup_script_template = "custom_data.sh.tpl"
+  # custom_startup_script_template = "custom_data.sh.tpl"
 }
 
 # module "vault_hvd_ubuntu22" {
 #   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-#   version = "0.2.4-alpha"
+#   version = "0.2.5-alpha"
 #   #------------------------------------------------------------------------------
 #   # Common
 #   #------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ module "vault_hvd_rhel8" {
 
 # module "vault_hvd_ubuntu24" {
 #   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-#   version = "0.2.4-alpha"
+#   version = "0.2.5-alpha"
 #   #------------------------------------------------------------------------------
 #   # Common
 #   #------------------------------------------------------------------------------
