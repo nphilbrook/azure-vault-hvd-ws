@@ -138,7 +138,7 @@ module "vault_hvd_rhel8" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
+  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment}-rhel8"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   create_resource_group = false
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
@@ -198,7 +198,7 @@ module "vault_hvd_ubuntu22" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
+  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment}-ubuntu22"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   create_resource_group = false
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
@@ -257,7 +257,7 @@ module "vault_hvd_ubuntu24" {
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
-  friendly_name_prefix  = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment
+  friendly_name_prefix  = "${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.environment}-ubuntu24"
   location              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.location
   create_resource_group = false
   resource_group_name   = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.centralus.resource_group_name
