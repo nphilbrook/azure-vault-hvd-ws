@@ -1,6 +1,6 @@
 module "vault_hvd" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.2.1-alpha"
+  version = "0.2.2-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ module "vault_hvd" {
 # 2nd DR cluster to validate some PKI assumptions
 module "vault_hvd_dr2" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.2.1-alpha"
+  version = "0.2.2-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ resource "azurerm_private_dns_cname_record" "vault" {
 ### testing firewalld change on other OSes
 module "vault_hvd_rhel8" {
   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-  version = "0.2.1-alpha"
+  version = "0.2.2-alpha"
   #------------------------------------------------------------------------------
   # Common
   #------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ module "vault_hvd_rhel8" {
 
 # module "vault_hvd_ubuntu22" {
 #   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-#   version = "0.2.1-alpha"
+#   version = "0.2.2-alpha"
 #   #------------------------------------------------------------------------------
 #   # Common
 #   #------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ module "vault_hvd_rhel8" {
 
 # module "vault_hvd_ubuntu24" {
 #   source  = "app.terraform.io/philbrook/vault-enterprise-hvd/azurerm"
-#   version = "0.2.1-alpha"
+#   version = "0.2.2-alpha"
 #   #------------------------------------------------------------------------------
 #   # Common
 #   #------------------------------------------------------------------------------
