@@ -10,6 +10,11 @@ module "tls_certs_newer_global" {
   tls_cert_sans = [
     "vault-primary.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
     "vault-dr.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+    "vault-foo.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+    "vault-bar.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+    "vault-baz.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+    "vault-norf.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}",
+    "vault-qux.${data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name}"
   ]
   tls_cert_email_address = var.cert_email
   create_cert_files      = false

@@ -34,3 +34,6 @@ EOF
 scp key up there
 
 (PACKER WHEN)
+
+# For safekeeping
+`vault operator init -recovery-shares=1 -recovery-threshold=1`
