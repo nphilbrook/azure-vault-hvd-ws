@@ -155,7 +155,7 @@ module "vault_hvd_rhel8" {
   create_vault_private_dns_record                    = true
   private_dns_zone_name                              = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   private_dns_zone_rg                                = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
-  create_private_dns_zone_vnet_link                  = true
+  create_private_dns_zone_vnet_link                  = false
   create_private_dns_zone_vnet_link_autoregistration = true
 
   #------------------------------------------------------------------------------
@@ -215,7 +215,7 @@ module "vault_hvd_ubuntu22" {
   create_vault_private_dns_record   = true
   private_dns_zone_name             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   private_dns_zone_rg               = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
-  create_private_dns_zone_vnet_link = true
+  create_private_dns_zone_vnet_link = false
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
@@ -274,7 +274,7 @@ module "vault_hvd_ubuntu24" {
   create_vault_private_dns_record   = true
   private_dns_zone_name             = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.zone_name
   private_dns_zone_rg               = data.tfe_outputs.azure_core_infra_outputs.values.environment_info.global.resource_group_name
-  create_private_dns_zone_vnet_link = true
+  create_private_dns_zone_vnet_link = false
 
   #------------------------------------------------------------------------------
   # Azure Key Vault installation secrets and unseal key
