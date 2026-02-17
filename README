@@ -29,6 +29,7 @@ scp -i ~/.ssh/acme_corp_briefing .tmux.conf  ubuntu@dev2-bastion.bnd6fte7fmhncrf
 tee ~/.ssh/config <<EOF
 IdentityFile ~/.ssh/acme_corp_briefing
 User vaultadmin
+StrictHostKeyChecking=no
 EOF
 ```
 scp key up there
