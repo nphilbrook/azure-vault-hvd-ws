@@ -408,22 +408,18 @@ EOF
 }
 
 function configure_firewalld {
-  set +euo pipefail
-  log "DEBUG" "Checking status of DBUS."
-  sudo systemctl status dbus
   if sudo systemctl is-active --quiet firewalld; then
     log "DEBUG" "firewalld unit is active. Waiting for firewall-cmd to become responsive..."
     local retries=0
-    local max_retries=12
+    local max_retries=24 
     while ! sudo timeout 10 firewall-cmd --state 2>/dev/null; do
       retries=$((retries + 1))
       if [[ $retries -ge $max_retries ]]; then
         log "ERROR" "firewall-cmd not responsive after $max_retries attempts. Continuing without firewall configuration."
-        set -euo pipefail
         return 0
       fi
-      log "DEBUG" "firewall-cmd not ready yet (attempt $retries/$max_retries). Sleeping 5 seconds..."
-      sleep 5
+      log "DEBUG" "firewall-cmd not ready yet (attempt $retries/$max_retries). Sleeping 10 seconds..."
+      sleep 10
     done
 
     log "INFO" "firewalld is running. Opening Vault ports ${vault_port_api}/tcp and ${vault_port_cluster}/tcp."
@@ -435,7 +431,6 @@ function configure_firewalld {
   else
     log "INFO" "firewalld is not running. Skipping firewall configuration."
   fi
-  set -euo pipefail
 }
 
 function start_enable_vault {
