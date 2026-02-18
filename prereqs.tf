@@ -206,3 +206,37 @@ resource "azurerm_virtual_network_peering" "candacentral_to_centralus" {
   allow_gateway_transit        = false
   use_remote_gateways          = false
 }
+
+# Human perms to twiddle the K/Vs
+resource "azurerm_key_vault_access_policy" "prereqs_kv_human_reader" {
+  for_each     = toset([module.vault_prereqs.key_vault_id, module.vault_prereqs_dr.key_vault_id])
+  key_vault_id = each.value
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  # nick.philbrook@hashicorp.services
+  object_id = "b56a55b4-e9d0-4b02-9ba2-f41288cd0b79"
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set",
+    "Delete",
+    "Recover",
+    "Backup",
+    "Restore",
+    "Purge"
+  ]
+
+  key_permissions = [
+    "Get",
+    "List",
+    "Update",
+    "Restore",
+    "Backup",
+    "Recover",
+    "Delete",
+    "Purge",
+    "Import",
+    "Create",
+    "GetRotationPolicy"
+  ]
+}

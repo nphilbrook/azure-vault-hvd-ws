@@ -5,3 +5,8 @@ data "tfe_outputs" "azure_core_infra_outputs" {
 data "tfe_outputs" "azure_hcp_control_outputs" {
   workspace = "azure-hcp-control"
 }
+
+#------------------------------------------------------------------------------
+# AzureRM Client Config (currently authenticated session)
+#------------------------------------------------------------------------------
+data "azurerm_client_config" "current" {}
